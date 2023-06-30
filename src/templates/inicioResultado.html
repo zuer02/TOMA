@@ -1,0 +1,11 @@
+<html>
+    <p>{{ type }} Z = {{ objective_expression }}</p><br>
+    <p>sujeito à</p>
+    {% for i in range(0,const) %}
+        {{ constraint_expressions[i] }}
+        <br>
+    {% endfor %}
+    <form action="{{ url_for('routes.getPrint') }}">
+        <button type="submit">Calcular</button>
+    </form>
+</html>

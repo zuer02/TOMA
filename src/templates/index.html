@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="/inicio" method="POST">
+      <label>quantidade de restrições:</label>
+      <input type="number" name="const" /><br />
+      <label>quantidade de variaveis:</label>
+      <input type="number" name="var" /><br />
+      <input type="submit" value="Enviar" />
+    </form>
+    {% block content %} 
+      {{ content|safe }}
+      {{ content2|safe }}
+      {{ content3|safe }}
+    {% endblock %}
+  </body>
+</html>
