@@ -7,6 +7,7 @@ from .dataStructures import (
 )
 
 class SimplexAlgorithm:
+   global iteracoes # vou usar na ultima linha
    """Algorithm to calculate optimal solution for simplex LPP problem.
    
    Contains simplex algorithm steps divided into functions.
@@ -266,6 +267,8 @@ class SimplexAlgorithm:
       iterationTable.aj = list(simplexProblem.AXBMaps.keys())
       simplexProblem.iterationTables = [iterationTable,]
    
+
+
    def calculateDeltaJ (simplexProblem):
       """Calculates deltaJ.
       
@@ -574,6 +577,7 @@ class SimplexAlgorithm:
       simplexProblem.optimalSolution = optimalSolution
    
    def calculateOptimalSolution (simplexProblem):
+      global iteracoes # vou usar na ultima linha
       """Calculates optimal solution, automatically.
       
       Runs all steps of simplex algorithm automatically to reach optimal
@@ -652,5 +656,10 @@ class SimplexAlgorithm:
                   )
                ):
                SimplexAlgorithm.frameOptimalSolution(simplexProblem)
-            
             break
+         
+      iteracoes = simplexProblem.iterationTables
+
+   def getIterations():
+      return iteracoes
+

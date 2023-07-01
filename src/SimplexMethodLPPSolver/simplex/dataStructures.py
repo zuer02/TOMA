@@ -1,3 +1,6 @@
+
+
+
 class Constraint:
    """Constraint data structure.
    
@@ -100,11 +103,21 @@ class Row:
       self.CB = None # float - cj.
       self.B = None # str - aj.
       self.XB = None # str - xj ~= aj.
-      self.b = None # float.
+      self.b = None # float. SIGNIFICA O LD
       self.aj = None # {'aj': aij,}.
       self.zij = None # {'aj':zij,}.
       self.isKeyRow = None # True|False.
       self.minRatio = None # float - bi/aij.
+   
+   def to_dict(self):
+        return {
+            'i': self.i,
+            'aj': self.aj, #coef das variaveis nao basicas
+            'b': self.b, # Lado Direito
+            'B': self.B, # nome da variavel basica x1,x2,x3,x4
+            'XB': self.XB, #coef da variavel basica
+            'CB': self.CB
+        }
 
 class IterationTable:
    """IterationTable data structure.
@@ -151,6 +164,16 @@ class IterationTable:
       self.rowi = None # [Row,]
       self.zj = None # {'aj': zj,}
       self.deltaJ = None # {'aj': deltaj,}
+   
+   def to_dict(self):     # aqui eu posso pegar o que eu quiser pra jogar pro front
+      return{
+         'numiteration': self.iteration,
+         'rows': [row.to_dict() for row in self.rowi],
+         'Elementopivo': self.keyElement,
+         'linhapivo': self.keyRow,
+         'colunapivo': self.keyColumn,
+         'z': self.zj
+      }
 
 class OptimalSolution:
    """OptimalSolution data structure.

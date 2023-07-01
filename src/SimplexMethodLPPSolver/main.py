@@ -2,12 +2,11 @@ import time
 
 from .statusPrinter import StatusPrinter as sp
 from .osCommands import OSCommands as osc
-from .simplex import (PreProcessor, SimplexAlgorithm, CustomExceptions)
-from flask import Flask, render_template, Blueprint
+from .simplex import (PreProcessor, SimplexAlgorithm, CustomExceptions, IterationTable)
+from flask import Flask, render_template, Blueprint, jsonify
 
 bp = Blueprint('routes', __name__)
 
-rows = []
 
 def runCalculation (problemType, objectiveFunction, constraints):
    simplexProblem = None
@@ -55,8 +54,6 @@ def runCalculation (problemType, objectiveFunction, constraints):
       ):
       for iterationTable in simplexProblem.iterationTables:
          sp.printIterationTable(iterationTable)
-         rows.append(sp.getRows())
-         print(rows)
          
       
    
@@ -205,13 +202,18 @@ def runSimplexMethod ():
    
 @bp.route('/getPrint')
 def getPrint():
-   Iterations = []
-   Iterations = sp.getIterations()
-   return render_template('index.html', content3=render_template('iteracoes.html', Iterations=Iterations, rows=rows))
+   Iterations = SimplexAlgorithm.getIterations()
+   for iteration in Iterations:
+      iteration = iteration.to_dict()
+      jsonify(iteration)
+   
+   
+   
+   return render_template('index.html', content3=render_template('iteracoes.html'))
 
 def simplex (problemType, objectiveFunction, constraints):
   runCalculation(problemType, objectiveFunction, constraints)
-  getPrint()
+  
 
 if __name__ == '__main__':
    simplex()

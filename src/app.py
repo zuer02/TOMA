@@ -25,7 +25,6 @@ def calcular():
     objective_expression = request.form.get('objective_expression')
     constraint_expressions = json.loads(request.form.get('constraint_expressions'))
     
-    
 
     simplex(type, objective_expression, constraint_expressions)
     
