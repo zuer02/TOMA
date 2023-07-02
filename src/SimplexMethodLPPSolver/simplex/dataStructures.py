@@ -112,11 +112,11 @@ class Row:
    def to_dict(self):
         return {
             'i': self.i,
-            'aj': self.aj, #coef das variaveis nao basicas
-            'b': self.b, # Lado Direito
-            'B': self.B, # nome da variavel basica x1,x2,x3,x4
-            'XB': self.XB, #coef da variavel basica
-            'CB': self.CB
+            'aj': {key: float(value) for key, value in self.aj.items()}, # coef das variaveis nao basicas
+            'b': float(self.b), # Lado Direito
+            'B': self.B,   # nome da variavel basica x1,x2,x3,x4
+            'XB': self.XB, # coef da variavel basica
+            'CB': float(self.CB)
         }
 
 class IterationTable:
@@ -167,12 +167,15 @@ class IterationTable:
    
    def to_dict(self):     # aqui eu posso pegar o que eu quiser pra jogar pro front
       return{
-         'numiteration': self.iteration,
-         'rows': [row.to_dict() for row in self.rowi],
-         'Elementopivo': self.keyElement,
-         'linhapivo': self.keyRow,
-         'colunapivo': self.keyColumn,
-         'z': self.zj
+         'iteration': self.iteration, # numero da iteracao
+         'Cj': self.Cj,
+         'aj': self.aj,
+         'keyRow': self.keyRow.to_dict() if self.keyRow else None, # linha pivo
+         'keyColumn': self.keyColumn, # coluna pivo
+         'keyElement': self.keyElement, # num pivo
+         'rowi': [row.to_dict() for row in self.rowi] if self.rowi else [],
+         'zj': self.zj, # z
+         'deltaJ': self.deltaJ
       }
 
 class OptimalSolution:
