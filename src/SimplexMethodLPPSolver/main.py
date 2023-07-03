@@ -205,12 +205,11 @@ def runSimplexMethod ():
 def getPrint():
    Iterations = SimplexAlgorithm.getIterations() # vetor de iteracoes
    jsoniteration = [it.to_dict() for it in Iterations] # to_dict em cada iteração
+   json_iterations = json.dumps(jsoniteration)
    
-   # jsonIterations = jsonify(objects=jsoniteration) # variavel que representa jsonify de cada iteracao
-   jsonIterations = Response(jsonify(objects=jsoniteration), content_type='text/plain')
 
-   return render_template('index.html', content3=jsonIterations)
-   # return render_template('index.html', content3=render_template('iteracoes.html'), jsonIterations=jsonIterations)
+   return render_template('index.html', content3=json_iterations)
+   
 
 def simplex (problemType, objectiveFunction, constraints):
   runCalculation(problemType, objectiveFunction, constraints)
