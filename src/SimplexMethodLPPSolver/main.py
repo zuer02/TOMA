@@ -3,7 +3,7 @@ import time
 from .statusPrinter import StatusPrinter as sp
 from .osCommands import OSCommands as osc
 from .simplex import (PreProcessor, SimplexAlgorithm, CustomExceptions, IterationTable)
-from flask import Flask, render_template, Blueprint, jsonify
+from flask import Flask, render_template, Blueprint, jsonify, Response
 import json
 
 bp = Blueprint('routes', __name__)
@@ -206,9 +206,11 @@ def getPrint():
    Iterations = SimplexAlgorithm.getIterations() # vetor de iteracoes
    jsoniteration = [it.to_dict() for it in Iterations] # to_dict em cada iteração
    
-   jsonIterations = jsonify(objects=jsoniteration) # variavel que representa jsonify de cada iteracao
-   
-   return render_template('index.html', content3=render_template('iteracoes.html'), jsonIterations=jsonIterations)
+   # jsonIterations = jsonify(objects=jsoniteration) # variavel que representa jsonify de cada iteracao
+   jsonIterations = Response(jsonify(objects=jsoniteration), content_type='text/plain')
+
+   return render_template('index.html', content3=jsonIterations)
+   # return render_template('index.html', content3=render_template('iteracoes.html'), jsonIterations=jsonIterations)
 
 def simplex (problemType, objectiveFunction, constraints):
   runCalculation(problemType, objectiveFunction, constraints)
