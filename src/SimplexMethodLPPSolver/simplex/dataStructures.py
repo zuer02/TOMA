@@ -116,7 +116,8 @@ class Row:
             'b': float(self.b), # Lado Direito
             'B': self.B,   # nome da variavel basica x1,x2,x3,x4
             'XB': self.XB, # coef da variavel basica
-            'CB': float(self.CB)
+            'CB': float(self.CB),
+            'minRatio': float(self.minRatio) if self.minRatio is not None else None
         }
 
 class IterationTable:

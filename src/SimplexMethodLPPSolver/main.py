@@ -205,7 +205,7 @@ def runSimplexMethod ():
 def getPrint():
    Iterations = SimplexAlgorithm.getIterations() # vetor de iteracoes
    jsoniteration = [it.to_dict() for it in Iterations] # to_dict em cada iteração
-   json_iterations = json.dumps(jsoniteration)
+   json_iterations = jsoniteration
    
 
    return render_template('index.html', content3=json_iterations)
