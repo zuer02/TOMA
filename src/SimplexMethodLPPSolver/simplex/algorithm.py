@@ -520,6 +520,7 @@ class SimplexAlgorithm:
       simplexProblem.iterationTables.append(newIterationTable)
    
    def frameOptimalSolution (simplexProblem):
+      
       """Frames optimal feasible solution.
       
       Frames optimal solution from last IterationTable only if calculation
@@ -575,6 +576,8 @@ class SimplexAlgorithm:
       )
       
       simplexProblem.optimalSolution = optimalSolution
+      global solOtima
+      solOtima = simplexProblem.optimalSolution
    
    def calculateOptimalSolution (simplexProblem):
       global iteracoes # vou usar na ultima linha
@@ -657,9 +660,12 @@ class SimplexAlgorithm:
                ):
                SimplexAlgorithm.frameOptimalSolution(simplexProblem)
             break
-         
+      
       iteracoes = simplexProblem.iterationTables
+
 
    def getIterations():
       return iteracoes
-
+   
+   def getsolOtima():
+      return solOtima

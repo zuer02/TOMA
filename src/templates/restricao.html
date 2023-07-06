@@ -23,9 +23,7 @@
     <button type="button" onclick="formSubmit()">Calcular</button>
   </form>
 
-  <form action="/grafico" method="post" id="form-grafico">
-    <button type="submit" name="grafico">Gerar Gráfico</button>
-  </form>
+
 
   <script>
         function formSubmit() {
@@ -81,16 +79,5 @@
 
           document.getElementById('form').submit();
         }
-
-      function redirectToGraph() {
-      var form = document.getElementById('form-grafico'); // Use o ID correto do formulário
-      var formData = new FormData(form);
-
-      // Construção da URL para a rota "/grafico" com os mesmos dados
-      var url = "/grafico?" + new URLSearchParams(formData).toString();
-
-      // Redirecionamento para a rota "/grafico"
-      window.location.href = url;
-    }
   </script>
 </html>

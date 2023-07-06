@@ -59,5 +59,7 @@ def grafico():
         
     return render_template('index.html', content2=render_template('inicioResultado.html', objective_expression=objective_expression, constraint_expressions=constraint_expressions, const = const, type=type))
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,6 +1,3 @@
-
-
-
 class Constraint:
    """Constraint data structure.
    
@@ -208,6 +205,12 @@ class OptimalSolution:
       self.iterationTable = None # Final IterationTable.
       self.Xj = None # {'xj': b,}
       self.optimalValue = None # float(z).
+   
+   def to_dict(self):
+      return{
+         'xj': self.Xj,
+         'optimalValue': self.optimalValue
+      }
 
 class SimplexProblem:
    """SimplexProblem data structure.
