@@ -13,8 +13,9 @@
     <input type="number" name="input_{{ i+1 }}_{{ j+1 }}" />x{{ j+1 }} {% endfor
     %}
     <select name="sign_{{ i+1 }}">
-      <option value="<="><=</option>
-      <option value=">=" selected>>=</option>
+      <option value="<=" selected><=</option>
+      <option value=">=">>=</option>
+      <option value="=">=</option>
     </select>
     <input type="number" name="input_ld_{{ i+ 1}}" />
     <br />
@@ -22,59 +23,74 @@
     <button type="button" onclick="formSubmit()">Calcular</button>
   </form>
 
+  <form action="/grafico" method="post" id="form-grafico">
+    <button type="submit" name="grafico">Gerar Gráfico</button>
+  </form>
+
   <script>
-    function formSubmit() {
-      var objectiveExpression = '';
-      var objectiveInputs = document.getElementsByClassName('objective-input');
-      var constraintExpressions = [];
+        function formSubmit() {
+          var objectiveExpression = '';
+          var objectiveInputs = document.getElementsByClassName('objective-input');
+          var constraintExpressions = [];
 
-      for (var i = 0; i < objectiveInputs.length; i++) {
-        var coefficient = objectiveInputs[i].value;
-        var variable = 'x' + (i + 1);
+          for (var i = 0; i < objectiveInputs.length; i++) {
+            var coefficient = objectiveInputs[i].value;
+            var variable = 'x' + (i + 1);
 
-        objectiveExpression += coefficient + variable + ' + ';
-      }
+            objectiveExpression += coefficient + variable + ' + ';
+          }
 
-      objectiveExpression = objectiveExpression.slice(0, -3).replace(/\s/g, "");
+          objectiveExpression = objectiveExpression.slice(0, -3).replace(/\s/g, "");
 
-      var constraintCount = {{ const }};
-      var variableCount = {{ var }};
+          var constraintCount = {{ const }};
+          var variableCount = {{ var }};
 
-      for (var i = 0; i < constraintCount; i++) {
-        var constraintExpression = '';
+          for (var i = 0; i < constraintCount; i++) {
+            var constraintExpression = '';
 
-        for (var j = 0; j < variableCount; j++) {
-          var inputId = 'input_' + (i + 1) + '_' + (j + 1);
-          var coefficient = document.getElementsByName(inputId)[0].value;
-          var variable = 'x' + (j + 1);
-          constraintExpression += coefficient + variable + ' + ';
+            for (var j = 0; j < variableCount; j++) {
+              var inputId = 'input_' + (i + 1) + '_' + (j + 1);
+              var coefficient = document.getElementsByName(inputId)[0].value;
+              var variable = 'x' + (j + 1);
+              constraintExpression += coefficient + variable + ' + ';
+            }
+
+            constraintExpression = constraintExpression.slice(0, -3).replace(/\s/g, "");
+
+            var signId = 'sign_' + (i + 1);
+            var sign = document.getElementsByName(signId)[0].value;
+            var ldId = 'input_ld_' + (i + 1);
+            var ld = document.getElementsByName(ldId)[0].value;
+
+            constraintExpression += sign + ld;
+            constraintExpressions.push(constraintExpression);
+          }
+
+          var hiddenInput = document.createElement('input');
+          hiddenInput.setAttribute('type', 'hidden');
+          hiddenInput.setAttribute('name', 'objective_expression');
+          hiddenInput.setAttribute('value', objectiveExpression);
+
+          var constraintInput = document.createElement('input');
+          constraintInput.setAttribute('type', 'hidden');
+          constraintInput.setAttribute('name', 'constraint_expressions');
+          constraintInput.setAttribute('value', JSON.stringify(constraintExpressions));
+
+          document.getElementById('form').appendChild(hiddenInput);
+          document.getElementById('form').appendChild(constraintInput);
+
+          document.getElementById('form').submit();
         }
 
-        constraintExpression = constraintExpression.slice(0, -3).replace(/\s/g, "");
+      function redirectToGraph() {
+      var form = document.getElementById('form-grafico'); // Use o ID correto do formulário
+      var formData = new FormData(form);
 
-        var signId = 'sign_' + (i + 1);
-        var sign = document.getElementsByName(signId)[0].value;
-        var ldId = 'input_ld_' + (i + 1);
-        var ld = document.getElementsByName(ldId)[0].value;
+      // Construção da URL para a rota "/grafico" com os mesmos dados
+      var url = "/grafico?" + new URLSearchParams(formData).toString();
 
-        constraintExpression += sign + ld;
-        constraintExpressions.push(constraintExpression);
-      }
-
-      var hiddenInput = document.createElement('input');
-      hiddenInput.setAttribute('type', 'hidden');
-      hiddenInput.setAttribute('name', 'objective_expression');
-      hiddenInput.setAttribute('value', objectiveExpression);
-
-      var constraintInput = document.createElement('input');
-      constraintInput.setAttribute('type', 'hidden');
-      constraintInput.setAttribute('name', 'constraint_expressions');
-      constraintInput.setAttribute('value', JSON.stringify(constraintExpressions));
-
-      document.getElementById('form').appendChild(hiddenInput);
-      document.getElementById('form').appendChild(constraintInput);
-
-      document.getElementById('form').submit();
+      // Redirecionamento para a rota "/grafico"
+      window.location.href = url;
     }
   </script>
 </html>
