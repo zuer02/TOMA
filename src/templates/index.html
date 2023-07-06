@@ -25,8 +25,9 @@
       <input type="submit" value="Enviar" />
     </form>
     {% block content %} {{ content|safe }} {{ content2|safe }}
-
+    
     <pre>
+      {{content3}}
     {% for iteration in content3 %}
     <h2>Iteração {{ iteration.iteration }}</h2>
     <table>
@@ -35,9 +36,13 @@
         <th></th>
         <th></th>
         <th>Cj</th>
-        {% set keys = iteration.Cj.keys() %}
-        {% for key in keys %}
-        <th>{{ key }}</th>
+        {% set items = iteration.Cj.items() %}
+        {% for key, value in items|sort %}
+          <th>{{ value }}</th>
+        {% endfor %}
+        {% set aj_length = items|length %}
+        {% for i in range(aj_length, 5) %}
+          <th></th>
         {% endfor %}
       </tr>
       <tr>
@@ -45,11 +50,9 @@
         <th>B</th>
         <th>XB</th>
         <th>b</th>
-        <th>a1</th>
-        <th>a2</th>
-        <th>a3</th>
-        <th>a4</th>
-        <th>a5</th>
+        {% for i in range(aj_length) %}
+          <th>a{{ i+1 }}</th>
+        {% endfor %}
         <th>MinRatio</th>
       </tr>
       {% for row in iteration.rowi %}
@@ -58,11 +61,10 @@
         <td>{{ row.B }}</td>
         <td>{{ row.XB }}</td>
         <td>{{ row.b }}</td>
-        <td>{{ row.aj.a1 }}</td>
-        <td>{{ row.aj.a2 }}</td>
-        <td>{{ row.aj.a3 }}</td>
-        <td>{{ row.aj.a4 }}</td>
-        <td>{{ row.aj.a5 }}</td>
+        {% set sorted_aj = row.aj|dictsort %}
+        {% for key, value in sorted_aj %}
+          <td>{{ value }}</td>
+        {% endfor %}
         <td>{{ row.minRatio }}</td>
       </tr>
       {% endfor %}
@@ -86,7 +88,7 @@
     
 
     
-    {% endfor %}
+   {% endfor %}
     </pre>
 
     {% endblock %}
