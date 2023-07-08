@@ -4,3 +4,5 @@ Rael Oliveira Flores
 Rodrigo Fonsceca
 Josué de Amorim Bastos Junior
 Gabriel Guimarães Silva
+
+TOMA is a system that solves a simplex problem using linear proggramming. It solves the problem in tableau method and plots the graph.
