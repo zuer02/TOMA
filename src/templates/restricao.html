@@ -33,6 +33,7 @@
     <button class="button is-success" type="button" onclick="formSubmit()">Calcular</button>
   </form>
 
+<<<<<<< HEAD
   <br>
   <br>
 
@@ -64,6 +65,31 @@
           for (var i = 0; i < constraintCount; i++) {
             var constraintExpression = '';
 
+=======
+
+
+  <script>
+        function formSubmit() {
+          var objectiveExpression = '';
+          var objectiveInputs = document.getElementsByClassName('objective-input');
+          var constraintExpressions = [];
+
+          for (var i = 0; i < objectiveInputs.length; i++) {
+            var coefficient = objectiveInputs[i].value;
+            var variable = 'x' + (i + 1);
+
+            objectiveExpression += coefficient + variable + ' + ';
+          }
+
+          objectiveExpression = objectiveExpression.slice(0, -3).replace(/\s/g, "");
+
+          var constraintCount = {{ const }};
+          var variableCount = {{ var }};
+
+          for (var i = 0; i < constraintCount; i++) {
+            var constraintExpression = '';
+
+>>>>>>> 35495a8b21b0d1a16f62a1e29c6950985c4635e4
             for (var j = 0; j < variableCount; j++) {
               var inputId = 'input_' + (i + 1) + '_' + (j + 1);
               var coefficient = document.getElementsByName(inputId)[0].value;

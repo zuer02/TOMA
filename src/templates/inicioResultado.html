@@ -3,7 +3,6 @@
     <p class="label">Sujeito à</p>
     {% for i in range(0,const) %}
         {{ constraint_expressions[i] }}
-        <br>
     {% endfor %}
     <form action="{{ url_for('routes.getPrint') }}">
         <button class="button is-success" type="submit">Calcular</button>

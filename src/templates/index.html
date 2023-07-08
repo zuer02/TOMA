@@ -4,11 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<<<<<<< HEAD
     <title>TOMA Simplex</title>
     <style>
       body{
         position: relative;
         background-image: url("https://i.ibb.co/8DDtcpZ/BACKTOMA.png") fixed no-repeat;
+=======
+    <title>Document</title>
+    <style>
+      body{
+        position: relative;
+        background: url("download.jpg") repeat-y;
+      }
+      form{
+        padding-top: 200px;
+>>>>>>> 35495a8b21b0d1a16f62a1e29c6950985c4635e4
       }
       th,
       td {
@@ -20,6 +31,7 @@
     </style>
   </head>
   <body>
+<<<<<<< HEAD
     
     <div style="background: url('https://i.ibb.co/vVfrprT/backtoma2-0.png') no-repeat fixed; background-size: cover; height:100%; min-height: 100vh;">
     <div class="container is-max-desktop">
@@ -37,6 +49,16 @@
       <input class="button is-success" type="submit" value="Enviar" />
       <br>
       <br>
+=======
+    <div style="background: url(/image/BACKTOMA.png);">
+    <div class="container is-max-desktop">
+    <form action="/inicio" method="POST">
+      <label class="title">quantidade de restrições:</label>
+      <input class="input" type="number" name="const" /><br />
+      <label class="title">quantidade de variaveis:</label>
+      <input class="input" type="number" name="var" /><br />
+      <input class="input" type="submit" value="Enviar" />
+>>>>>>> 35495a8b21b0d1a16f62a1e29c6950985c4635e4
     </form>
     {% block content %} {{ content|safe }} {{ content2|safe }}
     
@@ -99,6 +121,7 @@
       <p>Elemento Pivô: {{ iteration.keyElement }}</p>
     {% endif %}
     
+<<<<<<< HEAD
     {% if iteration == content3[-1] %}
       Solução ótima = {{ solotima }}
       <form action="/grafico" method="post" id="form-grafico">
@@ -108,9 +131,36 @@
     
    {% endfor %}
 
+=======
+
+    {% if iteration == content3[-1] %}
+        Solução ótima = {{ solotima }}
+
+      <form action="/grafico" method="post" id="form-grafico">
+        <button type="submit" name="grafico">Gerar Gráfico</button>
+      </form>
+    {% endif%}
+    
+   {% endfor %}
+
+    
+>>>>>>> 35495a8b21b0d1a16f62a1e29c6950985c4635e4
     </pre>
 
     {% endblock %}
+
+      <script>
+      function redirectToGraph() {
+      var form = document.getElementById('form-grafico'); // Use o ID correto do formulário
+      var formData = new FormData(form);
+
+      // Construção da URL para a rota "/grafico" com os mesmos dados
+      var url = "/grafico?" + new URLSearchParams(formData).toString();
+
+      // Redirecionamento para a rota "/grafico"
+      window.location.href = url;
+    }
+  </script>
   </body>
   
 </html>
