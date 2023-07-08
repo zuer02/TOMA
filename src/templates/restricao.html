@@ -1,80 +1,101 @@
 <html>
+  <!-- <audio id="meu-audioTOMA" src="js/TOMAAUDIO.ogg"></audio> -->
   <form action="/calcular" method="post" id="form">
+    <div class="select">
     <select name="type">
       <option value="max" selected>Maximizar</option>
       <option value="min">Minimizar</option>
     </select>
-    <br />
-    Z = {% for k in range(0, var) %}
-    <input type="number" class="objective-input" name="input_Z{{ k+1 }}" />x{{
+    <br/>
+    </div>
+    <div class="label">
+      <br>
+    Z ={% for k in range(0, var) %}
+    <input  style="padding: 10px; width: 200px;" class="input objective-input" type="number" name="input_Z{{ k+1 }}" />x{{
     k+1 }} {% endfor %}
-    <br />
-    {% for i in range(0, const) %} ({{ i+1 }}) {% for j in range(0, var) %}
-    <input type="number" name="input_{{ i+1 }}_{{ j+1 }}" />x{{ j+1 }} {% endfor
+    <br>
+    {% for i in range(0, const ) %} ({{ i+1 }})  {% for j in range(0, var) %}
+    <input  style="padding: 10px; width: 200px;" class="input"  type="number" name="input_{{ i+1 }}_{{ j+1 }}" />x{{ j+1 }} {% endfor
     %}
+  
+    <div class="select">
     <select name="sign_{{ i+1 }}">
-      <option value="<="><=</option>
-      <option value=">=" selected>>=</option>
+      <option value="<=" selected><=</option>
+      <option value=">=">>=</option>
+      <option value="=">=</option>
     </select>
-    <input type="number" name="input_ld_{{ i+ 1}}" />
-    <br />
+  </div>
+    <input  style="padding: 10px; width: 100px;" class="input"  type="number" name="input_ld_{{ i+ 1}}" />
+    <br>
     {% endfor %}
-    <button type="button" onclick="formSubmit()">Calcular</button>
+  
+  <br>
+    <button class="button is-success" type="button" onclick="formSubmit()">Calcular</button>
   </form>
 
+  <br>
+  <br>
+
+</div>
   <script>
-    function formSubmit() {
-      var objectiveExpression = '';
-      var objectiveInputs = document.getElementsByClassName('objective-input');
-      var constraintExpressions = [];
+        // function playAudioTOMA() {
+        //     var audio = document.getElementById("meu-audioTOMA");
+        //     audio.play();
+        // }
 
-      for (var i = 0; i < objectiveInputs.length; i++) {
-        var coefficient = objectiveInputs[i].value;
-        var variable = 'x' + (i + 1);
+        function formSubmit() {
+          // playAudioTOMA()
+          var objectiveExpression = '';
+          var objectiveInputs = document.getElementsByClassName('objective-input');
+          var constraintExpressions = [];
 
-        objectiveExpression += coefficient + variable + ' + ';
-      }
+          for (var i = 0; i < objectiveInputs.length; i++) {
+            var coefficient = objectiveInputs[i].value;
+            var variable = 'x' + (i + 1);
 
-      objectiveExpression = objectiveExpression.slice(0, -3).replace(/\s/g, "");
+            objectiveExpression += coefficient + variable + ' + ';
+          }
 
-      var constraintCount = {{ const }};
-      var variableCount = {{ var }};
+          objectiveExpression = objectiveExpression.slice(0, -3).replace(/\s/g, "");
 
-      for (var i = 0; i < constraintCount; i++) {
-        var constraintExpression = '';
+          var constraintCount = {{ const }};
+          var variableCount = {{ var }};
 
-        for (var j = 0; j < variableCount; j++) {
-          var inputId = 'input_' + (i + 1) + '_' + (j + 1);
-          var coefficient = document.getElementsByName(inputId)[0].value;
-          var variable = 'x' + (j + 1);
-          constraintExpression += coefficient + variable + ' + ';
+          for (var i = 0; i < constraintCount; i++) {
+            var constraintExpression = '';
+
+            for (var j = 0; j < variableCount; j++) {
+              var inputId = 'input_' + (i + 1) + '_' + (j + 1);
+              var coefficient = document.getElementsByName(inputId)[0].value;
+              var variable = 'x' + (j + 1);
+              constraintExpression += coefficient + variable + ' + ';
+            }
+
+            constraintExpression = constraintExpression.slice(0, -3).replace(/\s/g, "");
+
+            var signId = 'sign_' + (i + 1);
+            var sign = document.getElementsByName(signId)[0].value;
+            var ldId = 'input_ld_' + (i + 1);
+            var ld = document.getElementsByName(ldId)[0].value;
+
+            constraintExpression += sign + ld;
+            constraintExpressions.push(constraintExpression);
+          }
+
+          var hiddenInput = document.createElement('input');
+          hiddenInput.setAttribute('type', 'hidden');
+          hiddenInput.setAttribute('name', 'objective_expression');
+          hiddenInput.setAttribute('value', objectiveExpression);
+
+          var constraintInput = document.createElement('input');
+          constraintInput.setAttribute('type', 'hidden');
+          constraintInput.setAttribute('name', 'constraint_expressions');
+          constraintInput.setAttribute('value', JSON.stringify(constraintExpressions));
+
+          document.getElementById('form').appendChild(hiddenInput);
+          document.getElementById('form').appendChild(constraintInput);
+
+          document.getElementById('form').submit();
         }
-
-        constraintExpression = constraintExpression.slice(0, -3).replace(/\s/g, "");
-
-        var signId = 'sign_' + (i + 1);
-        var sign = document.getElementsByName(signId)[0].value;
-        var ldId = 'input_ld_' + (i + 1);
-        var ld = document.getElementsByName(ldId)[0].value;
-
-        constraintExpression += sign + ld;
-        constraintExpressions.push(constraintExpression);
-      }
-
-      var hiddenInput = document.createElement('input');
-      hiddenInput.setAttribute('type', 'hidden');
-      hiddenInput.setAttribute('name', 'objective_expression');
-      hiddenInput.setAttribute('value', objectiveExpression);
-
-      var constraintInput = document.createElement('input');
-      constraintInput.setAttribute('type', 'hidden');
-      constraintInput.setAttribute('name', 'constraint_expressions');
-      constraintInput.setAttribute('value', JSON.stringify(constraintExpressions));
-
-      document.getElementById('form').appendChild(hiddenInput);
-      document.getElementById('form').appendChild(constraintInput);
-
-      document.getElementById('form').submit();
-    }
   </script>
 </html>

@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>TOMA Simplex</title>
     <style>
-      table {
-        border-collapse: collapse;
+      body{
+        position: relative;
+        background-image: url("https://i.ibb.co/8DDtcpZ/BACKTOMA.png") fixed no-repeat;
       }
       th,
       td {
@@ -14,30 +16,46 @@
         padding: 5px;
         text-align: center;
       }
+
     </style>
   </head>
   <body>
-    <form action="/inicio" method="POST">
-      <label>quantidade de restrições:</label>
-      <input type="number" name="const" /><br />
-      <label>quantidade de variaveis:</label>
-      <input type="number" name="var" /><br />
-      <input type="submit" value="Enviar" />
+    
+    <div style="background: url('https://i.ibb.co/vVfrprT/backtoma2-0.png') no-repeat fixed; background-size: cover; height:100%; min-height: 100vh;">
+    <div class="container is-max-desktop">
+    <div style="display:flex; align-items:center; justify-content: center;">
+    <img src="https://i.ibb.co/SK6QQWR/simplex.png" alt="" style="width: 200px; margin-top: 4rem">
+    </div>
+    <form style="padding-top: 100px;" action="/inicio" method="POST">
+      <label class="title">Quantidade de restrições:</label>
+      <br>
+      <input class="input" type="number" name="const" /><br />
+      <label class="title">Quantidade de variaveis:</label>
+      <br>
+      <input class="input" type="number" name="var" /><br />
+      <br>
+      <input class="button is-success" type="submit" value="Enviar" />
+      <br>
+      <br>
     </form>
     {% block content %} {{ content|safe }} {{ content2|safe }}
-
+    
     <pre>
     {% for iteration in content3 %}
     <h2>Iteração {{ iteration.iteration }}</h2>
-    <table>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
       <tr>
         <th></th>
         <th></th>
         <th></th>
         <th>Cj</th>
-        {% set keys = iteration.Cj.keys() %}
-        {% for key in keys %}
-        <th>{{ key }}</th>
+        {% set items = iteration.Cj.items() %}
+        {% for key, value in items|sort %}
+          <th>{{ value }}</th>
+        {% endfor %}
+        {% set aj_length = items|length %}
+        {% for i in range(aj_length, 5) %}
+          <th></th>
         {% endfor %}
       </tr>
       <tr>
@@ -45,11 +63,9 @@
         <th>B</th>
         <th>XB</th>
         <th>b</th>
-        <th>a1</th>
-        <th>a2</th>
-        <th>a3</th>
-        <th>a4</th>
-        <th>a5</th>
+        {% for i in range(aj_length) %}
+          <th>a{{ i+1 }}</th>
+        {% endfor %}
         <th>MinRatio</th>
       </tr>
       {% for row in iteration.rowi %}
@@ -58,11 +74,10 @@
         <td>{{ row.B }}</td>
         <td>{{ row.XB }}</td>
         <td>{{ row.b }}</td>
-        <td>{{ row.aj.a1 }}</td>
-        <td>{{ row.aj.a2 }}</td>
-        <td>{{ row.aj.a3 }}</td>
-        <td>{{ row.aj.a4 }}</td>
-        <td>{{ row.aj.a5 }}</td>
+        {% set sorted_aj = row.aj|dictsort %}
+        {% for key, value in sorted_aj %}
+          <td>{{ value }}</td>
+        {% endfor %}
         <td>{{ row.minRatio }}</td>
       </tr>
       {% endfor %}
@@ -71,24 +86,31 @@
         <td></td>
         <td></td>
         <td>deltaJ</td>
-        <td>{{ iteration.deltaJ.a1 }}</td>
-        <td>{{ iteration.deltaJ.a2 }}</td>
-        <td>{{ iteration.deltaJ.a3 }}</td>
-        <td>{{ iteration.deltaJ.a4 }}</td>
-        <td>{{ iteration.deltaJ.a5 }}</td>
+        {% set items = iteration.deltaJ.items() %}
+        {% for key, value in items|sort %}
+          <td>{{ value }}</td>
+        {% endfor %}
+        {% set aj_length = items|length %}
       </tr>
       
     </table>
     {% if iteration.keyColumn and iteration.keyElement %}
-      <p>Key Column: {{ iteration.keyColumn }}</p>
-      <p>Key Element: {{ iteration.keyElement }}</p>
+      <p>Coluna Pivô: {{ iteration.keyColumn }}</p>
+      <p>Elemento Pivô: {{ iteration.keyElement }}</p>
     {% endif %}
     
-
+    {% if iteration == content3[-1] %}
+      Solução ótima = {{ solotima }}
+      <form action="/grafico" method="post" id="form-grafico">
+        <button class="button is-success" type="submit" name="grafico">Gerar Gráfico</button>
+      </form>
+    {% endif%}
     
-    {% endfor %}
+   {% endfor %}
+
     </pre>
 
     {% endblock %}
   </body>
+  
 </html>

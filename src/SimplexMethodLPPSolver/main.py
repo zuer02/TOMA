@@ -207,9 +207,11 @@ def getPrint():
    jsoniteration = [it.to_dict() for it in Iterations] # to_dict em cada iteração
    json_iterations = jsoniteration
    
-
-   return render_template('index.html', content3=json_iterations)
+   solOtima = SimplexAlgorithm.getsolOtima()
+   valorOtimo = solOtima.optimalValue
    
+
+   return render_template('index.html', content3=json_iterations, solotima=valorOtimo)
 
 def simplex (problemType, objectiveFunction, constraints):
   runCalculation(problemType, objectiveFunction, constraints)
